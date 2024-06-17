@@ -1,6 +1,302 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <p>H</p>
-  </body>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Yield [Evolve Edition]</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #1c1c1c;
+            border-bottom: 2px solid #d32f2f;
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        .nav-items {
+            display: flex;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-btn:hover {
+            color: #d32f2f;
+        }
+
+        .nav-btn.active {
+            color: #d32f2f;
+        }
+
+        .hamburger-menu {
+            display: none;
+            cursor: pointer;
+        }
+
+        .hamburger-icon {
+            font-size: 30px;
+            color: #ffffff;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1c1c1c;
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-nav-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .mobile-nav-btn.active {
+            color: #d32f2f;
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: #ffffff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        #content {
+            padding: 20px;
+            display: flexbox;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .section-divider {
+            margin: 20px 0;
+            height: 2px;
+            background-color: #d32f2f;
+        }
+
+        .content-section-divider {
+            margin: 20px 0;
+            height: 2px;
+            background-color: #545454;
+        }
+
+        .markdown-box {
+            background-color: #1e1e1e;
+            padding: 40px;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .markdown-box ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .markdown-box ul li::before {
+            content: '•';
+            color: #ff0000;
+            margin-right: 10px;
+        }
+
+        .markdown-box ul li.green::before {
+            content: '+';
+            color: #00ff00;
+        }
+
+        .lua-code-box {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            position: relative;
+            text-align: left;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-items {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <img src="resources/logo.png" alt="Logo" class="logo">
+        <div class="nav-items">
+            <button id="homeBtn" class="nav-btn active">Home</button>
+            <button id="downloadBtn" class="nav-btn">Download</button>
+        </div>
+        <div class="hamburger-menu">
+            <span class="hamburger-icon">&#9776;</span>
+        </div>
+    </nav>
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close">&times;</button>
+        <button id="mobileHomeBtn" class="mobile-nav-btn active">Home</button>
+        <button id="mobileDownloadBtn" class="mobile-nav-btn">Download</button>
+    </div>
+    <main id="content">
+        <!-- Content will be dynamically injected here -->
+    </main>
+    <script>
+        const versionNumber = "v2.55";
+        const content = document.getElementById('content');
+        const homeBtn = document.getElementById('homeBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileHomeBtn = document.getElementById('mobileHomeBtn');
+        const mobileDownloadBtn = document.getElementById('mobileDownloadBtn');
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const mobileNavClose = document.querySelector('.mobile-nav-close');
+
+        const markdownboxtext = `
++ Changed up the foodhax command to make a bit more sense when working with larger numbers of delay like 1
++ Added an unfoodhax command that disables foodhax, instead of needing the anticheat to kill you to disable foodhax.
++ Made the despawn block invisible, making it seamless when despawning with the despawn command.
++ A moderator detector, for the new update on Evolve that added a moderation system.
++ Slightly optimised the code to error a slight bit less (I'm not gonna use roblox-ts because im lazy to type alot for the ts compiler to know everything is correct and exists, sorry if there are bugs where things don't exist :C)
+        `;
+
+        // Function to render the Home page content
+        function renderHomePage() {
+            content.innerHTML = `
+        <div class="home-content">
+            <img src="resources/MLOGO.png" alt="MLOGO" class="home-logo">
+            <p>A branch of Infinite Yield 5.9.4 FE made for Evolve.</p>
+            <div class="content-section-divider"></div>
+            <h2>Updates</h2>
+            <p class="version-number">${versionNumber}</p>
+            <div class="markdown-box">${markdownToHtml(markdownboxtext)}</div>
+        </div>
+    `;
+        }
+        const luaCode = "";
+        // Function to render the Download page content
+        function renderDownloadPage() {
+            content.innerHTML = `
+        <div class="download-content">
+            <h1>Infinite Yield [Evolve Edition] ${versionNumber}</h1>
+            <div class="lua-code-box">
+                <pre>${luaCode}</pre>
+                <button class="copy-btn" onclick="copyToClipboard()">📋</button>
+            </div>
+        </div>
+    `;
+        }
+
+        // Function to convert markdown to HTML
+        function markdownToHtml(markdown) {
+            return markdown.split('\n').map(line => {
+                if (line.startsWith('* ')) {
+                    return `<li>${line.substring(2)}</li>`;
+                } else if (line.startsWith('+ ')) {
+                    return `<li class="green">${line.substring(2)}</li>`;
+                } else {
+                    return line;
+                }
+            }).join('');
+        }
+
+        // Function to handle navigation button clicks
+        function handleNavClick(page) {
+            if (page === 'home') {
+                renderHomePage();
+                setActiveButton(homeBtn, downloadBtn);
+                setActiveButton(mobileHomeBtn, mobileDownloadBtn);
+            } else if (page === 'download') {
+                renderDownloadPage();
+                setActiveButton(downloadBtn, homeBtn);
+                setActiveButton(mobileDownloadBtn, mobileHomeBtn);
+            }
+        }
+
+        // Function to set active button style
+        function setActiveButton(activeBtn, inactiveBtn) {
+            activeBtn.classList.add('active');
+            inactiveBtn.classList.remove('active');
+        }
+
+        // Function to copy code to clipboard
+        function copyToClipboard() {
+            const code = document.querySelector('.lua-code-box pre').innerText;
+            const button = document.querySelector('.lua-code-box button');
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = "✅";
+                setTimeout(()=>{button.textContent="📋";}, 1000);
+            });
+        }
+
+        // Event listeners for navigation buttons
+        homeBtn.addEventListener('click', () => handleNavClick('home'));
+        downloadBtn.addEventListener('click', () => handleNavClick('download'));
+        mobileHomeBtn.addEventListener('click', () => {
+            handleNavClick('home');
+            mobileNav.style.display = 'none';
+        });
+        mobileDownloadBtn.addEventListener('click', () => {
+            handleNavClick('download');
+            mobileNav.style.display = 'none';
+        });
+        hamburgerMenu.addEventListener('click', () => {
+            mobileNav.style.display = 'flex';
+        });
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.style.display = 'none';
+        });
+
+        // Initial load
+        renderHomePage();</script>
+</body>
+
 </html>
