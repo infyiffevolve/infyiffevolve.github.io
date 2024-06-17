@@ -172,7 +172,7 @@
 
 <body>
     <nav class="navbar">
-        <img src="resources/logo.png" alt="Logo" class="logo">
+        <img src="resources/logo.png" id="navbarlogo" alt="Logo" class="logo">
         <div class="nav-items">
             <button id="homeBtn" class="nav-btn active">Home</button>
             <button id="downloadBtn" class="nav-btn">Download</button>
@@ -199,6 +199,7 @@
         const mobileDownloadBtn = document.getElementById('mobileDownloadBtn');
         const hamburgerMenu = document.querySelector('.hamburger-menu');
         const mobileNavClose = document.querySelector('.mobile-nav-close');
+        const navLogo = document.getElementById('navbarlogo');
 
         const markdownboxtext = `
 + Changed up the foodhax command to make a bit more sense when working with larger numbers of delay like 1
@@ -207,8 +208,6 @@
 + A moderator detector, for the new update on Evolve that added a moderation system.
 + Slightly optimised the code to error a slight bit less (I'm not gonna use roblox-ts because im lazy to type alot for the ts compiler to know everything is correct and exists, sorry if there are bugs where things don't exist :C)
         `;
-
-        // Function to render the Home page content
         function renderHomePage() {
             content.innerHTML = `
         <div class="home-content">
@@ -221,8 +220,7 @@
         </div>
     `;
         }
-        const luaCode = "";
-        // Function to render the Download page content
+        const luaCode = `loadstring(game:HttpGet("https://raw.githubusercontent.com/sharpcystals-github342/InfiniteYieldEvolve/main/infiniteyieldforevolve.lua"))()`;
         function renderDownloadPage() {
             content.innerHTML = `
         <div class="download-content">
@@ -235,7 +233,6 @@
     `;
         }
 
-        // Function to convert markdown to HTML
         function markdownToHtml(markdown) {
             return markdown.split('\n').map(line => {
                 if (line.startsWith('* ')) {
@@ -248,7 +245,6 @@
             }).join('');
         }
 
-        // Function to handle navigation button clicks
         function handleNavClick(page) {
             if (page === 'home') {
                 renderHomePage();
@@ -261,13 +257,11 @@
             }
         }
 
-        // Function to set active button style
         function setActiveButton(activeBtn, inactiveBtn) {
             activeBtn.classList.add('active');
             inactiveBtn.classList.remove('active');
         }
 
-        // Function to copy code to clipboard
         function copyToClipboard() {
             const code = document.querySelector('.lua-code-box pre').innerText;
             const button = document.querySelector('.lua-code-box button');
@@ -277,7 +271,6 @@
             });
         }
 
-        // Event listeners for navigation buttons
         homeBtn.addEventListener('click', () => handleNavClick('home'));
         downloadBtn.addEventListener('click', () => handleNavClick('download'));
         mobileHomeBtn.addEventListener('click', () => {
@@ -294,8 +287,8 @@
         mobileNavClose.addEventListener('click', () => {
             mobileNav.style.display = 'none';
         });
+        navLogo.addEventListener('click', () => handleNavClick('home'));
 
-        // Initial load
         renderHomePage();</script>
 </body>
 
