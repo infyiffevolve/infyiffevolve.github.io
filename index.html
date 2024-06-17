@@ -23,6 +23,11 @@
             padding: 15px;
             background-color: #1c1c1c;
             border-bottom: 2px solid #d32f2f;
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            box-sizing: border-box;
+            z-index: 1000;
         }
 
         .logo {
@@ -101,6 +106,7 @@
         }
 
         #content {
+            margin-top: 50px;
             padding: 20px;
             display: flexbox;
             flex-direction: column;
@@ -274,6 +280,19 @@
                 setTimeout(()=>{button.textContent="📋";}, 1000);
             });
         }
+
+        function adjustContentMargin() {
+            const navbar = document.querySelector('.navbar');
+            const content = document.querySelector('#content');
+            const navbarHeight = navbar.offsetHeight;
+            content.style.marginTop = `${navbarHeight}px`;
+        }
+
+        // Call the function on page load
+        window.addEventListener('load', adjustContentMargin);
+
+        // Call the function on window resize
+        window.addEventListener('resize', adjustContentMargin);
 
         homeBtn.addEventListener('click', () => handleNavClick('home'));
         downloadBtn.addEventListener('click', () => handleNavClick('download'));
